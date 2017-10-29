@@ -4,7 +4,8 @@ MAINTAINER Alt Three <support@alt-three.com>
 
 EXPOSE 8000
 CMD ["/sbin/entrypoint.sh"]
-ARG cachet_ver=v2.3.12
+ARG cachet_ver
+ENV cachet_ver ${cachet_ver:-master}
 
 ENV COMPOSER_VERSION 1.4.1
 
@@ -83,6 +84,7 @@ RUN wget https://github.com/cachethq/Cachet/archive/${cachet_ver}.tar.gz && \
     chown -R www-data /var/www/html && \
     rm -r ${cachet_ver}.tar.gz && \
     php /bin/composer.phar global require "hirak/prestissimo:^0.3" && \
+    php /bin/composer.phar require predis/predis && \
     php /bin/composer.phar install --no-dev -o && \
     rm -rf bootstrap/cache/*
 
